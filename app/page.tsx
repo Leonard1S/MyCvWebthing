@@ -3,6 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HomeClient from '@/components/HomeClient';
 
+export const dynamic = 'force-static';
+
 export default function Home() {
   const personalData = getPersonalData();
   const experiences = getExperiences();

@@ -26,6 +26,14 @@ const stagger = {
 };
 
 export default function HomeClient({ personalData, experiences }: HomeClientProps) {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const withBasePath = (url?: string) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    const normalized = url.startsWith('/') ? url : `/${url}`;
+    return `${basePath}${normalized}`;
+  };
+
   return (
     <motion.div
       initial="initial"
@@ -120,11 +128,12 @@ export default function HomeClient({ personalData, experiences }: HomeClientProp
               <div className="relative h-64 w-64 sm:h-80 sm:w-80 overflow-hidden rounded-[32px] border-4 border-primary shadow-2xl z-10 bg-muted">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 flex items-center justify-center">
                   <Image 
-                    src={personalData.hero_image || "/placeholder-user.png"} 
+                    src={withBasePath(personalData.hero_image) || withBasePath("/placeholder-user.png")} 
                     alt={personalData.name}
                     width={320}
                     height={320}
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    priority
                   />
                 </div>
                 
@@ -282,10 +291,11 @@ export default function HomeClient({ personalData, experiences }: HomeClientProp
                     {exp.image_url ? (
                       <div className="relative w-full h-full">
                         <Image 
-                          src={exp.image_url} 
+                          src={withBasePath(exp.image_url)} 
                           alt={exp.position}
                           fill
                           className="object-cover"
+                          sizes="64px"
                           onError={(e) => {
                             // Fallback if image file is missing
                             const target = e.target as HTMLImageElement;

@@ -26,6 +26,14 @@ const itemVariants = {
 };
 
 export default function PortfolioClient({ skills, projects }: PortfolioClientProps) {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const withBasePath = (url?: string) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    const normalized = url.startsWith('/') ? url : `/${url}`;
+    return `${basePath}${normalized}`;
+  };
+
   // Group skills by category
   const groupedSkills = skills.reduce((acc, skill) => {
     if (!acc[skill.category]) {
@@ -139,10 +147,11 @@ export default function PortfolioClient({ skills, projects }: PortfolioClientPro
                   <div className="aspect-video w-full bg-muted relative overflow-hidden">
                     {project.image_url ? (
                       <Image
-                        src={project.image_url}
+                        src={withBasePath(project.image_url)}
                         alt={project.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';

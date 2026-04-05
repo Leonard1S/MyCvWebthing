@@ -3,6 +3,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PortfolioClient from '@/components/PortfolioClient';
 
+export const dynamic = 'force-static';
+
 export default function Portfolio() {
   const personalData = getPersonalData();
   const skills = getSkills();
